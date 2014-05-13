@@ -1,6 +1,7 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 
+var current_user_is_owner = false;
 
 function urlAdded(){
     console.log("form submitted");
@@ -36,6 +37,7 @@ function urlAdded(){
     var fb_new_chat_room = fb_instance.child('chatrooms').child(fb_chat_room_id);
     var fb_instance_users = fb_new_chat_room.child('users');
     var fb_instance_stream = fb_new_chat_room.child('stream');
+    var fb_owner = fb_new_chat_room.child('owner');
     var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
@@ -51,6 +53,27 @@ function urlAdded(){
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
+
+    //add user as owner if there is no owner
+    fb_owner.once('value', function(snapshot) {
+      if(snapshot.val() === null) {
+        //There's no owner, so add one
+        fb_owner.set({ name: username});
+      }
+    });
+
+    // check if user was the one who created the room
+    fb_owner.on('value', function(snapshot) {
+      var owner_info = snapshot.val();
+      if(owner_info.name === username) {
+        //current user is the owner of the room, so set global variable
+        current_user_is_owner = true; 
+        alert('User is the owner.');
+      } else {
+        alert('User is NOT the owner');
+      }
+    });
+
     fb_instance_users.push({ name: username,c: my_color});
     $("#waiting").remove();
 
