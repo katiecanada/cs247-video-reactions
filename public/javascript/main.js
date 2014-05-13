@@ -1,11 +1,26 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 
+var player;
+var videoID;
+var mediaRecorder;
+var finished=false;
+var video_length=2000;
+var pause = video_length+1000;
+var time=3;
+var library ={};
+var username;
+var cur_video_blob;
+var purpose_blob;
+var fb_instance_mainVid;
+var fb_instance_reactions;
 
-(function() {
 
-  var cur_video_blob = null;
+  cur_video_blob = null;
   var fb_instance;
+  purpose_blob = null;
+    var user;
+
 
   $(document).ready(function(){
     connect_to_chat_firebase();
@@ -30,7 +45,8 @@
     var fb_new_chat_room = fb_instance.child('chatrooms').child(fb_chat_room_id);
     var fb_instance_users = fb_new_chat_room.child('users');
     var fb_instance_stream = fb_new_chat_room.child('stream');
-   fb_instance_mainVid = fb_new_chat_room.child('mainVid');
+    fb_instance_mainVid = fb_new_chat_room.child('mainVid');
+    fb_instance_reactions = fb_new_chat_room.child('reactions');
     var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
@@ -44,29 +60,22 @@
       addVideo(snapshot.val().url);
     });
 
+    //display reactions that have already been recorded
+    fb_instance_reactions.on("child_added", function(snapshot){
+      appendVideo(snapshot.val().name, snapshot.val().v);
+    });
+
     // block until username is answered
-    var username = window.prompt("Welcome, warrior! please declare your name?");
+    username = window.prompt("Welcome, warrior! please declare your name?");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
     fb_instance_users.push({ name: username,c: my_color});
     $("#waiting").remove();
 
-    // bind submission box
-    $("#submission input").keydown(function( event ) {
-      if (event.which == 13) {
-        if(has_emotions($(this).val())){
-          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color});
-        }else{
-          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
-        }
-        $(this).val("");
-        scroll_to_bottom(0);
-      }
-    });
 
     // scroll to bottom in case there is already content
-    scroll_to_bottom(1300);
+    //scroll_to_bottom(1300);
   }
 
   // creates a message node and appends it to the conversation
@@ -135,7 +144,7 @@
 
       // now record stream in 5 seconds interval
       var video_container = document.getElementById('video_container');
-      var mediaRecorder = new MediaStreamRecorder(stream);
+      mediaRecorder = new MediaStreamRecorder(stream);
       var index = 1;
 
       mediaRecorder.mimeType = 'video/webm';
@@ -153,10 +162,10 @@
             cur_video_blob = b64_data;
           });
       };
-      setInterval( function() {
-        mediaRecorder.stop();
-        mediaRecorder.start(3000);
-      }, 3000 );
+      //setInterval( function() {
+        //mediaRecorder.stop();
+        //mediaRecorder.start(3000);
+      //}, 3000 );
       console.log("connect to media stream!");
     }
 
@@ -206,17 +215,105 @@
     return blob;
   };
 
-})();
+
 
 function urlAdded(){
     console.log("form submitted");
     var vidUrl=document.getElementById("url").value;
-    vidUrl=vidUrl.replace("watch?v=", "embed/");
+    vidUrl=vidUrl.replace("http://www.youtube.com/watch?v=", "");
     addVideo(vidUrl);
    fb_instance_mainVid.push({ url: vidUrl});
   }
 
   function addVideo(vidUrl){
-    document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+vidUrl+"\"></iframe>";
+    tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    player;
+    videoID=vidUrl;
+    done = false;
+    //document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+vidUrl+"\"></iframe>";
+  }
 
+   function onYouTubeIframeAPIReady() {
+        player = new YT.Player('playVideo', {
+          height: '390',
+          width: '640',
+          videoId: videoID,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+  function onPlayerReady(event) {
+        //event.target.playVideo();
+      }
+
+  function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          video_length=player.getDuration()*1000;
+          pause = video_length+1000;
+          console.log("started playing video");
+          recordWatcher();
+          done = true;
+          var vids= document.getElementsByClassName("reactionVid");
+          for(var i=0; i<vids.length; i++){
+            vids[i].play();
+         }
+        }
+      }
+  function stopVideo() {
+        player.stopVideo();
+      }
+
+  function recordWatcher(){
+        console.log("recording watcher");
+        record(mediaRecorder);
+        setTimeout(function(){saveVideo(username)},pause);
+      }
+
+  function saveVideo(string){
+      console.log("saving video");
+      library[string]=cur_video_blob;
+      var url = URL.createObjectURL(base64_to_blob(library[string]));
+      //appendVideo(username, url);
+      console.log("appending video");
+      fb_instance_reactions.push({name: username, v:url})
+    }
+
+    function appendVideo(name, url){
+      console.log("url: "+url);
+      console.log("appending video");
+      var video = document.createElement("video");
+      video.className="reactionVid";
+      var container = document.createElement("div");
+      video.autoplay = false;
+      video.controls = false; // optional
+      video.loop = false;
+      video.width = 120;
+      var source = document.createElement("source");
+      source.src =  url;
+      console.log("library "+source.src);
+      source.type =  "video/webm";
+      video.title=name;
+      video.appendChild(source);
+      var title = document.createElement("h2");
+      title.innerText=name;
+      container.appendChild(video);
+      container.appendChild(title)
+      document.getElementById("reactions").appendChild(container);
+    }
+
+  var record = function(mediaRecorder){
+    console.log("recording");
+     time=3;
+     document.getElementById("second_counter").style.display="block";
+     document.getElementById("webcam_stream").style.display="block";
+    console.log("video_length: "+video_length);
+     mediaRecorder.start(video_length);
+     setTimeout(function(){document.getElementById("webcam_stream").style.display="none"}, pause);
+     setTimeout(function(){document.getElementById("second_counter").style.display="none"}, pause);  
   }
