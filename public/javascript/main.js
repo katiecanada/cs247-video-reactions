@@ -66,9 +66,7 @@ var current_user_is_owner = false;
 
     //display reactions that have already been recorded if current user is owner
     fb_instance_reactions.on("child_added", function(snapshot){
-      //if(current_user_is_owner){
         appendVideo(snapshot.val().name, snapshot.val().v);
-      //};
     });
 
     // block until username is answered
@@ -91,9 +89,12 @@ var current_user_is_owner = false;
       if(owner_info.name == username) {
         //current user is the owner of the room, so set global variable
         current_user_is_owner = true; 
-        alert('User is the owner.');
+       // alert('User is the owner.');
+       document.getElementById("reactions").style.display="block";
       } else {
-        alert('User is NOT the owner');
+        //alert('User is NOT the owner');
+        document.getElementById("reactions").style.display="none";
+
       }
     });
 
