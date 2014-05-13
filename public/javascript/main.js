@@ -1,6 +1,13 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 
+
+function urlAdded(){
+    console.log("form submitted");
+    document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+document.getElementById("url").value +"\"></iframe>";
+
+  }
+
 (function() {
 
   var cur_video_blob = null;
@@ -10,6 +17,7 @@
     connect_to_chat_firebase();
     connect_webcam();
   });
+
 
   function connect_to_chat_firebase(){
     /* Include your Firebase link here!*/
