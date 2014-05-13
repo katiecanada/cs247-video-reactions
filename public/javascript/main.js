@@ -283,17 +283,18 @@ function urlAdded(){
       }
 
   function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
+        if (event.data == YT.PlayerState.PLAYING) {
           video_length=player.getDuration()*1000;
           pause = video_length+1000;
           console.log("started playing video");
           if(!current_user_is_owner){
             recordWatcher();
           }
-          done = true;
           if(current_user_is_owner){
             var vids= document.getElementsByClassName("reactionVid");
+            var currentTime = player.getCurrentTime();
             for(var i=0; i<vids.length; i++){
+               vids[i].currentTime=currentTime;
                vids[i].play();
             }
           }
