@@ -248,7 +248,9 @@ var current_user_is_owner = false;
 function urlAdded(){
     console.log("form submitted");
     var vidUrl=document.getElementById("url").value;
-    vidUrl=vidUrl.replace("http://www.youtube.com/watch?v=", "");
+   // vidUrl=vidUrl.replace("http://www.youtube.com/watch?v=", "");
+   vidUrl=vidUrl.match("v=[0-9A-Za-z]*");
+   vidUrl=vidUrl[0].replace("v=", "");
     addVideo(vidUrl);
    fb_instance_mainVid.push({ url: vidUrl});
   }
