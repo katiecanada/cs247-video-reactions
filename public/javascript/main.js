@@ -2,14 +2,6 @@
 // For CS247, Spring 2014
 
 
-function urlAdded(){
-    console.log("form submitted");
-    var vidUrl=document.getElementById("url").value;
-    vidUrl=vidUrl.replace("watch?v=", "embed/");
-    document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+vidUrl+"\"></iframe>";
-
-  }
-
 (function() {
 
   var cur_video_blob = null;
@@ -38,6 +30,7 @@ function urlAdded(){
     var fb_new_chat_room = fb_instance.child('chatrooms').child(fb_chat_room_id);
     var fb_instance_users = fb_new_chat_room.child('users');
     var fb_instance_stream = fb_new_chat_room.child('stream');
+   fb_instance_mainVid = fb_new_chat_room.child('mainVid');
     var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
@@ -46,6 +39,11 @@ function urlAdded(){
     });
     fb_instance_stream.on("child_added",function(snapshot){
       display_msg(snapshot.val());
+    });
+
+    //display video if one is already associated with the room
+    fb_instance_mainVid.on("child_added",function(snapshot){
+      addVideo(snapshot.val().url);
     });
 
     // block until username is answered
@@ -211,3 +209,16 @@ function urlAdded(){
   };
 
 })();
+
+function urlAdded(){
+    console.log("form submitted");
+    var vidUrl=document.getElementById("url").value;
+    vidUrl=vidUrl.replace("watch?v=", "embed/");
+    addVideo(vidUrl);
+   fb_instance_mainVid.push({ url: vidUrl});
+  }
+
+  function addVideo(vidUrl){
+    document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+vidUrl+"\"></iframe>";
+
+  }
