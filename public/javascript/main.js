@@ -34,9 +34,7 @@
     var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
-    fb_instance_users.on("child_added",function(snapshot){
-      display_msg({m:snapshot.val().name+" joined the room",c: snapshot.val().c});
-    });
+  
     fb_instance_stream.on("child_added",function(snapshot){
       display_msg(snapshot.val());
     });
