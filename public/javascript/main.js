@@ -4,7 +4,9 @@
 
 function urlAdded(){
     console.log("form submitted");
-    document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+document.getElementById("url").value +"\"></iframe>";
+    var vidUrl=document.getElementById("url").value;
+    vidUrl=vidUrl.replace("watch?v=", "embed/");
+    document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+vidUrl+"\"></iframe>";
 
   }
 
