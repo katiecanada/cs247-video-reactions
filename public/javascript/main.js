@@ -281,10 +281,11 @@ function urlAdded(){
       var url = URL.createObjectURL(base64_to_blob(library[string]));
       //appendVideo(username, url);
       console.log("appending video");
-      fb_instance_reactions.push({name: username, v:url})
+      fb_instance_reactions.push({name: username, v:cur_video_blob})
     }
 
     function appendVideo(name, url){
+      var url = URL.createObjectURL(base64_to_blob(url));
       console.log("url: "+url);
       console.log("appending video");
       var video = document.createElement("video");
