@@ -49,7 +49,6 @@ var current_user_is_owner = false;
     var fb_instance_users = fb_new_chat_room.child('users');
     var fb_instance_stream = fb_new_chat_room.child('stream');
     var fb_owner = fb_new_chat_room.child('owner');
-
     fb_instance_mainVid = fb_new_chat_room.child('mainVid');
     fb_instance_reactions = fb_new_chat_room.child('reactions');
     var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
@@ -65,9 +64,11 @@ var current_user_is_owner = false;
       addVideo(snapshot.val().url);
     });
 
-    //display reactions that have already been recorded
+    //display reactions that have already been recorded if current user is owner
     fb_instance_reactions.on("child_added", function(snapshot){
-      appendVideo(snapshot.val().name, snapshot.val().v);
+      //if(current_user_is_owner){
+        appendVideo(snapshot.val().name, snapshot.val().v);
+      //};
     });
 
     // block until username is answered
@@ -87,7 +88,7 @@ var current_user_is_owner = false;
     // check if user was the one who created the room
     fb_owner.on('value', function(snapshot) {
       var owner_info = snapshot.val();
-      if(owner_info.name === username) {
+      if(owner_info.name == username) {
         //current user is the owner of the room, so set global variable
         current_user_is_owner = true; 
         alert('User is the owner.');
@@ -283,12 +284,16 @@ function urlAdded(){
           video_length=player.getDuration()*1000;
           pause = video_length+1000;
           console.log("started playing video");
-          recordWatcher();
+          if(!current_user_is_owner){
+            recordWatcher();
+          }
           done = true;
-          var vids= document.getElementsByClassName("reactionVid");
-          for(var i=0; i<vids.length; i++){
-            vids[i].play();
-         }
+          if(current_user_is_owner){
+            var vids= document.getElementsByClassName("reactionVid");
+            for(var i=0; i<vids.length; i++){
+               vids[i].play();
+            }
+          }
         }
       }
   function stopVideo() {
