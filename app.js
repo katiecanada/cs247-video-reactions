@@ -16,7 +16,12 @@ var server = http.createServer(app);
 // var io = require('socket.io').listen(server);
 // var chat = require('./routes/chat')(io);
 
-// Heroku dynamically assigns your app a port, so you can't set the port to a fixed number. Heroku adds the port to the env, so you can pull it from there. http://stackoverflow.com/questions/15693192/heroku-node-js-error-web-process-failed-to-bind-to-port-within-60-seconds-of
+// Heroku dynamically assigns your app a port, 
+//so you can't set the port to a fixed number. 
+//Heroku adds the port to the env, so you can pull 
+//it from there.
+//http://stackoverflow.com/questions/15693192/heroku-node-js-error-
+//web-process-failed-to-bind-to-port-within-60-seconds-of
 server.listen(process.env.PORT || 3000);
 if (app.get('env') === 'development') {
     console.log("Now listening on port 3000");
