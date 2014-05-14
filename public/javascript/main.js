@@ -14,6 +14,7 @@ var cur_video_blob;
 var purpose_blob;
 var fb_instance_mainVid;
 var fb_instance_reactions;
+var sentTo=[];
 
 var current_user_is_owner = false;
 
@@ -42,7 +43,7 @@ var current_user_is_owner = false;
     }else{
       fb_chat_room_id = Math.random().toString(36).substring(7);
     }
-    display_msg({m:"Share this url with your friend to join this chat: "+ document.location.origin+"/#"+fb_chat_room_id,c:"red"})
+    //display_msg({m:"Share this url with your friend to join this chat: "+ document.location.origin+"/#"+fb_chat_room_id,c:"red"})
 
     // set up variables to access firebase data structure
     var fb_new_chat_room = fb_instance.child('chatrooms').child(fb_chat_room_id);
@@ -59,10 +60,7 @@ var current_user_is_owner = false;
       display_msg(snapshot.val());
     });
 
-    //display video if one is already associated with the room
-    fb_instance_mainVid.on("child_added",function(snapshot){
-      addVideo(snapshot.val().url);
-    });
+
 
     //display reactions that have already been recorded if current user is owner
     fb_instance_reactions.on("child_added", function(snapshot){
@@ -95,6 +93,15 @@ var current_user_is_owner = false;
         //alert('User is NOT the owner');
         document.getElementById("reactions").style.display="none";
 
+      }
+    });
+
+        //display video if one is already associated with the room
+    fb_instance_mainVid.on("child_added",function(snapshot){
+      addVideo(snapshot.val().url);
+      if(current_user_is_owner){
+        console.log("should display share div");
+        displayShareDiv();
       }
     });
 
@@ -246,14 +253,22 @@ var current_user_is_owner = false;
 
 
 function urlAdded(){
-    console.log("form submitted");
-    var vidUrl=document.getElementById("url").value;
-   // vidUrl=vidUrl.replace("http://www.youtube.com/watch?v=", "");
+   console.log("form submitted");
+   var vidUrl=document.getElementById("url").value;
    vidUrl=vidUrl.match("v=[0-9A-Za-z]*");
    vidUrl=vidUrl[0].replace("v=", "");
-    addVideo(vidUrl);
+   addVideo(vidUrl);
    fb_instance_mainVid.push({ url: vidUrl});
-  }
+   displayShareDiv();
+}
+
+function displayShareDiv(){
+   var link=document.location.origin+"/#"+fb_chat_room_id;
+   document.getElementById("shareLink").innerHTML=link;
+   document.getElementById("shareLink").href=link;
+   document.getElementById("invites").value="";
+   document.getElementById("sendInvites").style.display="block";
+}
 
   function addVideo(vidUrl){
     tag = document.createElement('script');
@@ -352,4 +367,19 @@ function urlAdded(){
      mediaRecorder.start(video_length);
      setTimeout(function(){document.getElementById("webcam_stream").style.display="none"}, pause);
      setTimeout(function(){document.getElementById("second_counter").style.display="none"}, pause);  
+  }
+
+  function sendInvites(){
+    var contacts = document.getElementById("invites").value;
+    contacts=contacts.replace(";",",");
+    contacts=contacts.replace(", ",",");
+    contacts=contacts.replace(" ",",");
+    sentTo.push(contacts.split(","));
+    //contacts=contacts.split(",");
+    console.log(contacts);
+    //for(var i=0; i<contacts.length; i++){
+     // var email = contacts[i];
+     var link=document.location.origin+"/#"+fb_chat_room_id;
+     document.location.href="mailto:"+contacts+"?subject=Youtube Vid&body=I want to share a video with you. Check it out at this link: "+link;
+    //}
   }

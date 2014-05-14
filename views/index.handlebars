@@ -6,8 +6,15 @@
   <div id="webcam_stream"></div>
   <div id="video_container"></div>
 
-<div id="playVideo">
+<div id="sendInvites">
+<h2> Share with your friends!</h2>
+ Enter email addresses separated by commas:
+<input type="textbox" name="invites" id="invites">
+<button type="button" onclick="sendInvites()">Send! </button> <br>
+Or simply share this URL: <a id="shareLink"></a>
+</div>
 
+<div id="playVideo">
 Video URL: <input type="text" name="url" id="url">
 <button type="button" onclick="urlAdded()"> Upload! </button>
 </div>
