@@ -283,8 +283,8 @@ function displayShareDiv(){
 
    function onYouTubeIframeAPIReady() {
         player = new YT.Player('playVideo', {
-          height: '390',
-          width: '640',
+          //height: '390',
+          //width: '640',
           videoId: videoID,
           events: {
             'onReady': onPlayerReady,
@@ -341,6 +341,7 @@ function displayShareDiv(){
       var video = document.createElement("video");
       video.className="reactionVid";
       var container = document.createElement("div");
+      container.className="reactionDiv"
       video.autoplay = false;
       video.controls = false; // optional
       video.loop = false;
@@ -382,4 +383,6 @@ function displayShareDiv(){
      var link=document.location.origin+"/#"+fb_chat_room_id;
      document.location.href="mailto:"+contacts+"?subject=Youtube Vid&body=I want to share a video with you. Check it out at this link: "+link;
     //}
+    document.getElementById("sendInvites").style.display="none";
+    document.getElementById("sendMore").style.display="block";
   }

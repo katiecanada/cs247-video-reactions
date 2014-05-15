@@ -1,6 +1,7 @@
 body {
   margin: 10px;
   font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url('images/crossword.png');
 }
 a {
   color: #00B7FF;
@@ -60,5 +61,34 @@ a {
   display: none;
 }
 #sendInvites {
-  padding: 30px;
+  padding: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  display: in-line block;
+  border-width: 2px;
+  border-color: black;
+  border-style: solid;
+  width: 600px;
+  margin-bottom: 30px;
+  background-color: white;
+}
+#playVideo {
+  display: block;
+  margin: 0 auto;
+}
+#h1 {
+  font-family: "Lucida Console", Monaco, monospace;
+}
+.player {
+  width: 300px;
+}
+#sendMore {
+  position: absolute;
+  top: 30px;
+  right: 15px;
+  display: none;
+}
+.reactionDiv {
+  display: inline-block;
+  padding: 10px;
 }
