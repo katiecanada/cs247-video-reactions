@@ -55,6 +55,7 @@ var current_user_is_owner = false;
     var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
+    window.location.href=document.location.origin+"/#"+fb_chat_room_id;
   
     fb_instance_stream.on("child_added",function(snapshot){
       display_msg(snapshot.val());
