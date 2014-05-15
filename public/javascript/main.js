@@ -89,9 +89,11 @@ var current_user_is_owner = false;
         current_user_is_owner = true; 
        // alert('User is the owner.');
        document.getElementById("reactions").style.display="block";
+       document.getElementById("friend_guide").style.display="none";
       } else {
         //alert('User is NOT the owner');
         document.getElementById("reactions").style.display="none";
+        document.getElementById("owner_guide").style.display="none";
 
       }
     });
@@ -169,6 +171,12 @@ var current_user_is_owner = false;
       });
       video.play();
       webcam_stream.appendChild(video);
+
+      // add recording message
+      var rm_div = document.createElement('div');
+      rm_div.setAttribute("id", "record_message");
+      rm_div.appendChild(document.createTextNode("Recording..."));
+      webcam_stream.appendChild(rm_div);
 
       // counter
       var time = 0;
