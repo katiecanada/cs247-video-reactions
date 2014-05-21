@@ -260,7 +260,10 @@ var current_user_is_owner = false;
   };
 
 
-
+/*
+* Called when the user uploads a video url.
+* Calls the proper functions to display the video and to display the sharing information
+*/
 function urlAdded(){
    console.log("form submitted");
    var vidUrl=document.getElementById("url").value;
@@ -271,6 +274,10 @@ function urlAdded(){
    displayShareDiv();
 }
 
+/*
+* Displays the div with information about how to share the video
+* Called once a video is uploaded
+*/
 function displayShareDiv(){
    var link=document.location.origin+"/#"+fb_chat_room_id;
    document.getElementById("shareLink").innerHTML=link;
@@ -279,6 +286,9 @@ function displayShareDiv(){
    document.getElementById("sendInvites").style.display="block";
 }
 
+/*
+* Adds the youtube video selected by the user to the page
+*/
   function addVideo(vidUrl){
     tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
@@ -290,6 +300,9 @@ function displayShareDiv(){
     //document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+vidUrl+"\"></iframe>";
   }
 
+/*
+* youtube api function called when the api frame is ready
+*/
    function onYouTubeIframeAPIReady() {
         player = new YT.Player('playVideo', {
           //height: '390',
@@ -302,10 +315,18 @@ function displayShareDiv(){
         });
       }
 
+/*
+* Youtube api function called when the video is loaded
+*/
   function onPlayerReady(event) {
         //event.target.playVideo();
       }
 
+/*
+* youtube api function called whenever the state of the player changes (eg play/pause)
+* if the video starts playing this function causes the reaction videos to start playing if the user is the owner
+* If the user is the owner it calls the function to begin recording
+*/
   function onPlayerStateChange(event) {
         if (event.data == YT.PlayerState.PLAYING) {
           video_length=player.getDuration()*1000;
@@ -324,16 +345,27 @@ function displayShareDiv(){
           }
         }
       }
+
+
   function stopVideo() {
         player.stopVideo();
       }
 
+/*
+* called once the viewer presses play on a video 
+* calls the function that triggers the recording and saves the video after the 
+* length of the video has passed
+*/
   function recordWatcher(){
         console.log("recording watcher");
         record(mediaRecorder);
         setTimeout(function(){saveVideo(username)},pause);
       }
 
+/*
+* This function is called once a reaction video is finished recording
+* It saves the video to firebase
+*/
   function saveVideo(string){
       console.log("saving video");
       library[string]=cur_video_blob;
@@ -343,6 +375,10 @@ function displayShareDiv(){
       fb_instance_reactions.push({name: username, v:cur_video_blob})
     }
 
+/*
+* This function adds a reaction video to the page
+* It takes a url to a video and a username to display beneath the video
+*/
     function appendVideo(name, url){
       var url = URL.createObjectURL(base64_to_blob(url));
       console.log("url: "+url);
@@ -368,6 +404,10 @@ function displayShareDiv(){
       document.getElementById("reactions").appendChild(container);
     }
 
+/*
+* This is the function that gets called when the viewer starts watching the video
+* It starts a recording of the same length as the video and displays the web cam view
+*/
   var record = function(mediaRecorder){
     console.log("recording");
      time=3;
@@ -379,6 +419,7 @@ function displayShareDiv(){
      setTimeout(function(){document.getElementById("second_counter").style.display="none"}, pause);  
   }
 
+/*
   function sendInvites(){
     var contacts = document.getElementById("invites").value;
     contacts=contacts.replace(";",",");
@@ -394,4 +435,4 @@ function displayShareDiv(){
     //}
     document.getElementById("sendInvites").style.display="none";
     document.getElementById("sendMore").style.display="block";
-  }
+  }*/
