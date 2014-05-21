@@ -1,22 +1,23 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 
-var player;
-var videoID;
-var mediaRecorder;
-var finished=false;
-var video_length=2000;
-var pause = video_length+1000;
-var time=3;
-var library ={};
-var username;
-var cur_video_blob;
+var ephemeral=true; //flag to turn ephemerality on and off for testing purposes
+var player; //youtube player object 
+var videoID; //youtube id for the youtube video
+var mediaRecorder; //object that handles video recording
+var finished=false; //flag that shows whether video is finished playing
+var video_length=2000; //length that recording should be
+var pause = video_length+1000; //pause length after recording starts till video should be savedc
+var time=3; //time displayed on countdown on top of webcam 
+var library ={}; //structure to store all of the reaction videos 
+var username; //username of current viewer
+var cur_video_blob; //most recently recorded blob 
 var purpose_blob;
-var fb_instance_mainVid;
-var fb_instance_reactions;
-var sentTo=[];
+var fb_instance_mainVid; //fire base instance containing the main video 
+var fb_instance_reactions; //firebase instance for the reaction videos 
+//var sentTo=[]; //arry of people to send the video to (used by email feature)
 
-var current_user_is_owner = false;
+var current_user_is_owner = false; //flag that says whether the current user is the owner
 
 
 
