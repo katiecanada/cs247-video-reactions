@@ -2,9 +2,27 @@ body {
   margin: 10px;
   font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-image: url('images/crossword.png');
+  background-color: #f1f1f1;
 }
 a {
   color: #00B7FF;
+}
+#header {
+  text-align: center;
+}
+#shareDiv {
+  text-align: center;
+}
+#url {
+  height: 30px;
+  width: 306px;
+  border: none;
+}
+#upload {
+  color: white;
+  background-color: #d14a40;
+  border: none;
+  height: 30px;
 }
 #webcam_stream {
   position: absolute;
