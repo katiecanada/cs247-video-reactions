@@ -16,6 +16,8 @@ var purpose_blob;
 var fb_instance_mainVid; //fire base instance containing the main video 
 var fb_instance_reactions; //firebase instance for the reaction videos 
 //var sentTo=[]; //arry of people to send the video to (used by email feature)
+var reactionsCount = 0; //number of reaction videos displayed
+var reactionLimit = 3; //maximum number of reaction videos displayed
 
 var current_user_is_owner = false; //flag that says whether the current user is the owner
 
@@ -352,6 +354,10 @@ function displayShareDiv(){
         player.stopVideo();
       }
 
+  function playVideo() {
+      player.playVideo();
+  }
+
 /*
 * called once the viewer presses play on a video 
 * calls the function that triggers the recording and saves the video after the 
@@ -381,6 +387,9 @@ function displayShareDiv(){
 * It takes a url to a video and a username to display beneath the video
 */
     function appendVideo(name, url){
+      if (reactionsCount >= reactionLimit) {
+        return;
+      }
       var url = URL.createObjectURL(base64_to_blob(url));
       console.log("url: "+url);
       console.log("appending video");
@@ -391,7 +400,7 @@ function displayShareDiv(){
       video.autoplay = false;
       video.controls = false; // optional
       video.loop = false;
-      video.width = 120;
+      video.width = 360;
       var source = document.createElement("source");
       source.src =  url;
       console.log("library "+source.src);
@@ -400,9 +409,14 @@ function displayShareDiv(){
       video.appendChild(source);
       var title = document.createElement("h2");
       title.innerText=name;
+      container.appendChild(title);
+
+      //make clicking reaction video start youtube video
+      video.onclick = playVideo;
       container.appendChild(video);
-      container.appendChild(title)
+
       document.getElementById("reactions").appendChild(container);
+      reactionsCount += 1;
     }
 
 /*
