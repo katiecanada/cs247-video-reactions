@@ -178,3 +178,8 @@ h2 {
   right: 5px;
   top: 5px;
 }
+#welcome {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+}

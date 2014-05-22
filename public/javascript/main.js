@@ -81,11 +81,21 @@ var current_user_is_owner = false; //flag that says whether the current user is 
       }
     });
 
+    var cookieVal ="; " + document.cookie
+    var cookieParts = cookieVal.split("; "+ "username"+"=");
+    if(cookieParts.length==2){
+      username=cookieParts[1];
+    }
+    else{
     // block until username is answered
     username = window.prompt("Welcome to Youtube React! Enter your real name to begin");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
+    //add username to cookie
+    document.cookie="username="+username;
+  }
+  document.getElementById("welcome").innerHTML="Welcome "+username+" !";
 
     //add user as owner if there is no owner
     fb_owner.once('value', function(snapshot) {
@@ -285,7 +295,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 function urlAdded(){
    console.log("form submitted");
    var vidUrl=document.getElementById("url").value;
-   vidUrl=vidUrl.match("v=[0-9A-Za-z]*");
+   vidUrl=vidUrl.match("v=[0-9A-Za-z-_]*");
    vidUrl=vidUrl[0].replace("v=", "");
    addVideo(vidUrl);
    fb_instance_mainVid.push({ url: vidUrl});
