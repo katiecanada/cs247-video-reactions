@@ -120,7 +120,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
         //display video if one is already associated with the room
     fb_instance_mainVid.on("child_added",function(snapshot){
       addVideo(snapshot.val().url);
-      if(current_user_is_owner){
+      if(current_user_is_owner && reactionsCount==0){
         console.log("should display share div");
         displayShareDiv();
       }
