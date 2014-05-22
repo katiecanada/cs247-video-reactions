@@ -329,6 +329,8 @@ function displayShareDiv(){
 * If the user is the owner it calls the function to begin recording
 */
   function onPlayerStateChange(event) {
+    //if video starts playing
+    console.log("event" +event );
         if (event.data == YT.PlayerState.PLAYING) {
           video_length=player.getDuration()*1000;
           pause = video_length+1000;
@@ -342,8 +344,18 @@ function displayShareDiv(){
             for(var i=0; i<vids.length; i++){
                vids[i].currentTime=currentTime;
                vids[i].play();
+               vids[i].className="reactionVid viewed"
             }
           }
+        }
+        //if video finishes playing
+        if (event.data === 0 && ephemeral) {
+          console.log("end");
+          var vidsViewed= document.getElementsByClassName("viewed");
+           for(var i=0; i<vidsViewed.length; i++){
+               vidsViewed[i].style.display="none";
+            }
+             fb_instance_reactions.remove();
         }
       }
 
@@ -420,7 +432,9 @@ function displayShareDiv(){
      setTimeout(function(){document.getElementById("second_counter").style.display="none"}, pause);  
   }
 
+
 /*
+//This is the email feature from the previous version
   function sendInvites(){
     var contacts = document.getElementById("invites").value;
     contacts=contacts.replace(";",",");
