@@ -383,7 +383,7 @@ function closeShare(){
             for(var i=0; i<vids.length; i++){
                vids[i].currentTime=currentTime;
                vids[i].play();
-               vids[i].className="reactionVid viewed"
+               vids[i].parentNode.className="reactionDiv viewed"
             }
           }
         }
