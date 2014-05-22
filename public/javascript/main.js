@@ -384,6 +384,7 @@ function closeShare(){
                vids[i].currentTime=currentTime;
                vids[i].play();
                vids[i].parentNode.className="reactionDiv viewed"
+               reactionsCount--;
             }
           }
         }
