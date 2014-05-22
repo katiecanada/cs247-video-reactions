@@ -16,6 +16,8 @@ var purpose_blob;
 var fb_instance_mainVid; //fire base instance containing the main video 
 var fb_instance_reactions; //firebase instance for the reaction videos 
 //var sentTo=[]; //arry of people to send the video to (used by email feature)
+var cameraOn = false; //keeps track of whether the user has enabled the webcam
+var ownerName;
 
 var current_user_is_owner = false; //flag that says whether the current user is the owner
 
@@ -70,7 +72,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     });
 
     // block until username is answered
-    username = window.prompt("Welcome, warrior! please declare your name?");
+    username = window.prompt("Welcome to youtube record where you can see your friend's reactions to youtube videos! Enter your name to begin and make sure to enable the camera at the top of your screen");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
@@ -86,7 +88,8 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     // check if user was the one who created the room
     fb_owner.on('value', function(snapshot) {
       var owner_info = snapshot.val();
-      if(owner_info.name == username) {
+      ownerName = owner_info.name;
+      if(ownerName == username) {
         //current user is the owner of the room, so set global variable
         current_user_is_owner = true; 
        // alert('User is the owner.');
@@ -158,6 +161,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
     // callback for when we get video stream from user.
     var onMediaSuccess = function(stream) {
+      cameraOn=true;
       // create video element, attach webcam stream to video element
       var video_width= 160;
       var video_height= 120;
@@ -283,7 +287,7 @@ function displayShareDiv(){
    var link=document.location.origin+"/#"+fb_chat_room_id;
    document.getElementById("shareLink").innerHTML=link;
    document.getElementById("shareLink").href=link;
-   document.getElementById("invites").value="";
+  // document.getElementById("invites").value="";
    document.getElementById("sendInvites").style.display="block";
 }
 
@@ -330,8 +334,16 @@ function displayShareDiv(){
 */
   function onPlayerStateChange(event) {
     //if video starts playing
-    console.log("event" +event );
+    console.log("event" + YT.PlayerState );
         if (event.data == YT.PlayerState.PLAYING) {
+          if(!cameraOn && !current_user_is_owner){
+            player.stopVideo();
+            player.seekTo(0, false);
+            window.prompt("Please turn the camera on at the top of the screen before you can watch the video. "+ownerName+" wants to see your reaction!");
+            //player.playVideo();
+            return;
+          }
+          console.log("am i getting here?");
           video_length=player.getDuration()*1000;
           pause = video_length+1000;
           console.log("started playing video");
