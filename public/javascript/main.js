@@ -71,31 +71,17 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     });
 
 
-
-    //display reactions that have already been recorded if current user is owner
-    fb_instance_reactions.on("child_added", function(snapshot){
-       if(current_user_is_owner){
-        document.getElementById("sendInvites").style.display="none";
-        document.getElementById("sendMore").style.display="block";
-        appendVideo(snapshot.val().name, snapshot.val().v);
-      }
-    });
-
     var cookieVal ="; " + document.cookie
     var cookieParts = cookieVal.split("; "+ "username"+"=");
     if(cookieParts.length==2){
       username=cookieParts[1];
+      document.getElementById("welcome").innerHTML="Welcome "+username+" !";
     }
     else{
-    // block until username is answered
-    username = window.prompt("Welcome to Youtube React! Enter your real name to begin");
-    if(!username){
-      username = "anonymous"+Math.floor(Math.random()*1111);
+      updateName();
     }
-    //add username to cookie
-    document.cookie="username="+username;
-  }
-  document.getElementById("welcome").innerHTML="Welcome "+username+" !";
+    document.getElementById("change_name").style.display="block";
+
 
     //add user as owner if there is no owner
     fb_owner.once('value', function(snapshot) {
@@ -123,6 +109,18 @@ var current_user_is_owner = false; //flag that says whether the current user is 
         document.getElementById("owner_guide").style.display="none";
       }
     });
+
+        //display reactions that have already been recorded if current user is owner
+    fb_instance_reactions.on("child_added", function(snapshot){
+       console.log(current_user_is_owner);
+       if(current_user_is_owner){
+        console.log("new reaction");
+        document.getElementById("sendInvites").style.display="none";
+        document.getElementById("sendMore").style.display="block";
+        appendVideo(snapshot.val().name, snapshot.val().v);
+      }
+    });
+
 
         //display video if one is already associated with the room
     fb_instance_mainVid.on("child_added",function(snapshot){
@@ -491,6 +489,17 @@ function closeShare(){
      setTimeout(function(){document.getElementById("second_counter").style.display="none"}, pause);  
   }
 
+
+//displays popup to update username
+  function updateName(){
+    username = window.prompt("Welcome to Youtube React! Enter your real name to begin");
+    if(!username){
+      username = "anonymous"+Math.floor(Math.random()*1111);
+    }
+    //add username to cookie
+    document.cookie="username="+username;
+    document.getElementById("welcome").innerHTML="Welcome "+username+"!";
+  }
 
 /*
 //This is the email feature from the previous version

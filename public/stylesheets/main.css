@@ -31,7 +31,7 @@ a {
   border: none;
   padding-left: 10px;
 }
-#upload {
+button {
   color: white;
   background-color: #d14a40;
   border: none;
@@ -116,7 +116,7 @@ a {
 }
 #sendMore {
   position: absolute;
-  top: 30px;
+  top: 15px;
   right: 15px;
   display: none;
 }
@@ -177,9 +177,19 @@ h2 {
   position: absolute;
   right: 5px;
   top: 5px;
+  padding: 2px;
 }
 #welcome {
   position: absolute;
   left: 15px;
   top: 15px;
+}
+#change_name {
+  color: #00B7FF;
+  text-decoration: underline;
+  position: absolute;
+  left: 15px;
+  top: 35px;
+  cursor: pointer;
+  display: none;
 }
