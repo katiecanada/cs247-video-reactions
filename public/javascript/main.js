@@ -281,7 +281,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 function urlAdded(){
    console.log("form submitted");
    var vidUrl=document.getElementById("url").value;
-   vidUrl=vidUrl.match("v=[0-9A-Za-z]*");
+   vidUrl=vidUrl.match("v=.*");
    vidUrl=vidUrl[0].replace("v=", "");
    addVideo(vidUrl);
    fb_instance_mainVid.push({ url: vidUrl});
