@@ -74,11 +74,15 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
     //display reactions that have already been recorded if current user is owner
     fb_instance_reactions.on("child_added", function(snapshot){
+       if(current_user_is_owner){
+        document.getElementById("sendInvites").style.display="none";
+        document.getElementById("sendMore").style.display="block";
         appendVideo(snapshot.val().name, snapshot.val().v);
+      }
     });
 
     // block until username is answered
-    username = window.prompt("Welcome to youtube record where you can see your friend's reactions to youtube videos! Enter your real name to begin");
+    username = window.prompt("Welcome to Youtube React! Enter your real name to begin");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
@@ -301,6 +305,14 @@ function displayShareDiv(){
 }
 
 /*
+* Hides the share div
+*/
+function closeShare(){
+  document.getElementById("sendInvites").style.display="none";
+  document.getElementById("sendMore").style.display="block";
+}
+
+/*
 * Adds the youtube video selected by the user to the page
 */
   function addVideo(vidUrl){
@@ -451,6 +463,7 @@ function displayShareDiv(){
 
       document.getElementById("reactions").appendChild(container);
       reactionsCount += 1;
+      document.getElementById("playVideo").style.height=50;
     }
 
 /*

@@ -87,6 +87,7 @@ a {
 }
 #sendInvites {
   display: none;
+  position: relative;
 }
 #webcam_stream {
   display: none;
@@ -171,4 +172,9 @@ a {
 h2 {
   margin-top: 3px;
   margin-botton: 3px;
+}
+#x {
+  position: absolute;
+  right: 5px;
+  top: 5px;
 }
