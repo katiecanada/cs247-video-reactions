@@ -1,6 +1,7 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 
+var https=false;
 var ephemeral=true; //flag to turn ephemerality on and off for testing purposes
 var player; //youtube player object 
 var videoID; //youtube id for the youtube video
@@ -59,7 +60,11 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
-    window.location.href=document.location.origin+"/#"+fb_chat_room_id;
+    var location = document.location.origin;
+    if(https){
+      location = location.slice(0,4)+"s"+location.slice(4); //THIS LINE TURNS ON HTTPS. Doesn't work locally
+    }
+    window.location.href=location+"/#"+fb_chat_room_id;
   
     fb_instance_stream.on("child_added",function(snapshot){
       display_msg(snapshot.val());
@@ -73,7 +78,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     });
 
     // block until username is answered
-    username = window.prompt("Welcome to youtube record where you can see your friend's reactions to youtube videos! Enter your name to begin and make sure to enable the camera at the top of your screen");
+    username = window.prompt("Welcome to youtube record where you can see your friend's reactions to youtube videos! Enter your real name to begin");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
@@ -99,7 +104,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
        document.getElementById("footer").style.display="none";
       } else {
         //alert('User is NOT the owner');
-        connect_webcam();
+        //connect_webcam();
         document.getElementById("reactions").style.display="none";
         document.getElementById("owner_guide").style.display="none";
       }
@@ -163,6 +168,8 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
     // callback for when we get video stream from user.
     var onMediaSuccess = function(stream) {
+      player.playVideo();
+      document.getElementById("camera_message").style.display="none";
       cameraOn=true;
       // create video element, attach webcam stream to video element
       var video_width= 160;
@@ -297,6 +304,7 @@ function displayShareDiv(){
 * Adds the youtube video selected by the user to the page
 */
   function addVideo(vidUrl){
+    document.getElementById("shareDiv").style.display="none";
     tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     firstScriptTag = document.getElementsByTagName('script')[0];
@@ -341,8 +349,10 @@ function displayShareDiv(){
           if(!cameraOn && !current_user_is_owner){
             player.stopVideo();
             player.seekTo(0, false);
-            window.prompt("Please turn the camera on at the top of the screen before you can watch the video. "+ownerName+" wants to see your reaction!");
+            connect_webcam();
+            //window.prompt("Please turn the camera on at the top of the screen before you can watch the video. "+ownerName+" wants to see your reaction!");
             //player.playVideo();
+            document.getElementById("camera_message").style.display="block";
             return;
           }
           console.log("am i getting here?");

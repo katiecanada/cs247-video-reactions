@@ -132,7 +132,7 @@ a {
 }
 #owner_guide {
   margin: 0px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 #friend_guide {
   margin: 0px;
@@ -141,4 +141,34 @@ a {
 #record_message {
   font-weight: bold;
   color: red;
+}
+#arrow {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+#message {
+  background: white;
+  position: absolute;
+  right: 175px;
+  top: 40px;
+  width: 300px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: red;
+  font-size: 20px;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+#camera_message {
+  display: none;
+}
+#logo {
+  width: 300px;
+  padding: 0px;
+}
+h2 {
+  margin-top: 3px;
+  margin-botton: 3px;
 }
