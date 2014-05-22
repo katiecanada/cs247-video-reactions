@@ -60,16 +60,11 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
-    var location = document.location.origin;
-    if(https){
-      location = location.slice(0,4)+"s"+location.slice(4); //THIS LINE TURNS ON HTTPS. Doesn't work locally
-    }
-    window.location.href=location+"/#"+fb_chat_room_id;
-  
-    fb_instance_stream.on("child_added",function(snapshot){
+    refreshPage();
+
+     fb_instance_stream.on("child_added",function(snapshot){
       display_msg(snapshot.val());
     });
-
 
     var cookieVal ="; " + document.cookie
     var cookieParts = cookieVal.split("; "+ "username"+"=");
@@ -499,8 +494,23 @@ function closeShare(){
     //add username to cookie
     document.cookie="username="+username;
     document.getElementById("welcome").innerHTML="Welcome "+username+"!";
+    return true;
   }
 
+  function changeName(){
+    var refresh=updateName();
+    if(refresh)
+      location.reload(true);
+  }
+
+  function refreshPage(){
+    console.log("refreshing");
+    var location = document.location.origin;
+    if(https){
+      location = location.slice(0,4)+"s"+location.slice(4); //THIS LINE TURNS ON HTTPS. Doesn't work locally
+    }
+    window.location.href=location+"/#"+fb_chat_room_id;
+  }
 /*
 //This is the email feature from the previous version
   function sendInvites(){
