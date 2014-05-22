@@ -1,5 +1,5 @@
-  <div> 
-  	<h1 id="title">Welcome to Youtube-record!</h1>
+  <div id="header"> 
+  	<h1 id="title"><a href="/"> Youtube React </a></h1>
   	<p id="owner_guide"> Watch your friends' reactions to a video! </p>
   	<p id="friend_guide"> Your friend wants to see your reaction to this video. Press play to watch it and show him what you think! </p>
   </div>
@@ -15,9 +15,14 @@ Simply send this URL: <a id="shareLink"></a>
 
 </div>
 
-<div id="playVideo">
-Enter a video URL to share: <input type="text" name="url" id="url" onkeydown="if (event.keyCode == 13) urlAdded()">
-<button id="upload" type="button" onclick="urlAdded()"> Upload Video to Share! </button>
+<div id="shareDiv">
+	<input type="text" name="url" id="url" placeholder="Paste a youtube URL..." onkeydown="if (event.keyCode == 13) urlAdded()">
+	<button id="upload" type="button" onclick="urlAdded()"> Share </button>
 </div>
 
 <div id="reactions"></div>
+<div id="playVideo"></div>
+
+<div id="footer">
+	<a href="/"> Share a new youtube video </a>
+</div>

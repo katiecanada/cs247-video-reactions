@@ -18,6 +18,8 @@ var fb_instance_reactions; //firebase instance for the reaction videos
 //var sentTo=[]; //arry of people to send the video to (used by email feature)
 var cameraOn = false; //keeps track of whether the user has enabled the webcam
 var ownerName;
+var reactionsCount = 0; //number of reaction videos displayed
+var reactionLimit = 3; //maximum number of reaction videos displayed
 
 var current_user_is_owner = false; //flag that says whether the current user is the owner
 
@@ -31,7 +33,6 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
   $(document).ready(function(){
     connect_to_chat_firebase();
-    connect_webcam();
   });
 
 
@@ -95,11 +96,12 @@ var current_user_is_owner = false; //flag that says whether the current user is 
        // alert('User is the owner.');
        document.getElementById("reactions").style.display="block";
        document.getElementById("friend_guide").style.display="none";
+       document.getElementById("footer").style.display="none";
       } else {
         //alert('User is NOT the owner');
+        connect_webcam();
         document.getElementById("reactions").style.display="none";
         document.getElementById("owner_guide").style.display="none";
-
       }
     });
 
@@ -376,6 +378,10 @@ function displayShareDiv(){
         player.stopVideo();
       }
 
+  function playVideo() {
+      player.playVideo();
+  }
+
 /*
 * called once the viewer presses play on a video 
 * calls the function that triggers the recording and saves the video after the 
@@ -405,6 +411,9 @@ function displayShareDiv(){
 * It takes a url to a video and a username to display beneath the video
 */
     function appendVideo(name, url){
+      if (reactionsCount >= reactionLimit) {
+        return;
+      }
       var url = URL.createObjectURL(base64_to_blob(url));
       console.log("url: "+url);
       console.log("appending video");
@@ -415,7 +424,7 @@ function displayShareDiv(){
       video.autoplay = false;
       video.controls = false; // optional
       video.loop = false;
-      video.width = 120;
+      video.width = 360;
       var source = document.createElement("source");
       source.src =  url;
       console.log("library "+source.src);
@@ -424,9 +433,14 @@ function displayShareDiv(){
       video.appendChild(source);
       var title = document.createElement("h2");
       title.innerText=name;
+      container.appendChild(title);
+
+      //make clicking reaction video start youtube video
+      video.onclick = playVideo;
       container.appendChild(video);
-      container.appendChild(title)
+
       document.getElementById("reactions").appendChild(container);
+      reactionsCount += 1;
     }
 
 /*
