@@ -95,7 +95,6 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
     var cookieVal ="; " + document.cookie
     var cookieParts = cookieVal.split("; "+ "username"+"=");
-    console.log(cookieParts[1].split(";")[0]);
     if(cookieParts.length==2){
       username=cookieParts[1].split(";")[0];
       document.getElementById("welcome").innerHTML="Welcome "+username+" !";
