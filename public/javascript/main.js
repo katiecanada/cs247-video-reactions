@@ -36,6 +36,20 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     connect_to_chat_firebase();
   });
 
+  function createCopyButton() {
+    var client = new ZeroClipboard( document.getElementById("copy-button"), {} );
+
+    client.on( "load", function(client) {
+      // alert( "movie is loaded" );
+
+      client.on( "complete", function(client, args) {
+        // `this` is the element that was clicked
+        // this.style.display = "none";
+        this.innerHTML = "Copied!";
+        // alert("Copied text to clipboard: " + args.text );
+      } );
+    } );
+  }
 
   function connect_to_chat_firebase(){
     /* Include your Firebase link here!*/
@@ -97,6 +111,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
        document.getElementById("reactions").style.display="block";
        document.getElementById("friend_guide").style.display="none";
        document.getElementById("footer").style.display="none";
+       createCopyButton();
       } else {
         //alert('User is NOT the owner');
         //connect_webcam();
@@ -301,8 +316,9 @@ function urlAdded(){
 */
 function displayShareDiv(){
    var link=document.location.origin+"/#"+fb_chat_room_id;
-   document.getElementById("shareLink").innerHTML=link;
-   document.getElementById("shareLink").href=link;
+   document.getElementById("shareLink").value=link;
+   document.getElementById("shareLink").readOnly=true;
+   // document.getElementById("shareLink").href=link;
   // document.getElementById("invites").value="";
    document.getElementById("sendInvites").style.display="block";
 }

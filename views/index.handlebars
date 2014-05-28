@@ -23,14 +23,17 @@
 
 <div id="sendInvites">
 <h2> Share with your friends!</h2>
-Simply send this URL: <a id="shareLink"></a>
+Simply send this URL: <input id="shareLink">
+<button id="copy-button" data-clipboard-target="shareLink" data-clipboard-text="Copy Me!" title="Click to copy me.">Copy to Clipboard</button>
 <button id="x" type="button" onclick="closeShare()">x </button>
 </div>
 
 <div id="shareDiv">
-	<input type="text" name="url" id="url" placeholder="Paste a youtube URL..." onkeydown="if (event.keyCode == 13) urlAdded()">
+	<input type="text" name="url" id="url" placeholder="Paste a youtube URL..." onkeydown="if (event.keyCode == 13) urlAdded()" onpaste="setTimeout(urlAdded, 4);">
 	<button id="upload" type="button" onclick="urlAdded()"> Share </button>
 </div>
+    
+
 
 <div id="reactions"></div>
 <div id="playVideo"></div>
