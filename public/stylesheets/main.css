@@ -27,6 +27,7 @@ a {
 }
 #shareLink {
   padding: 4px;
+  width: 200px;
 }
 #url {
   height: 30px;
