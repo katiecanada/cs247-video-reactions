@@ -112,9 +112,11 @@ var current_user_is_owner = false; //flag that says whether the current user is 
        document.getElementById("friend_guide").style.display="none";
        document.getElementById("footer").style.display="none";
        createCopyButton();
+       ga("send", "event", "owner", "visit");
       } else {
         //alert('User is NOT the owner');
         //connect_webcam();
+        ga("send", "event", "non-owner", "visit");
         document.getElementById("reactions").style.display="none";
         document.getElementById("owner_guide").style.display="none";
       }
@@ -193,6 +195,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
       player.playVideo();
       document.getElementById("camera_message").style.display="none";
       cameraOn=true;
+      ga("send", "event", "non-owner", "camera-on");
       // create video element, attach webcam stream to video element
       var video_width= 160;
       var video_height= 120;
@@ -388,12 +391,15 @@ function closeShare(){
           }
           console.log("am i getting here?");
           video_length=player.getDuration()*1000;
+          ga("send", "event", "video", "length", video_length);
           pause = video_length+1000;
           console.log("started playing video");
           if(!current_user_is_owner){
+            ga("send", "event", "non-owner", "play");
             recordWatcher();
           }
           if(current_user_is_owner){
+            ga("send", "event", "owner", "play");
             var vids= document.getElementsByClassName("reactionVid");
             var currentTime = player.getCurrentTime();
             for(var i=0; i<vids.length; i++){
@@ -405,6 +411,10 @@ function closeShare(){
           }
         }
         //if video finishes playing
+        if(event.data==0){
+          if(current_user_is_owner) ga("send", "event", "owner", "finish");
+          else ga("send", "event", "non-owner", "finish");
+        }
         if (event.data === 0 && ephemeral) {
           console.log("end");
           var vidsViewed= document.getElementsByClassName("viewed");
@@ -412,6 +422,13 @@ function closeShare(){
                vidsViewed[i].style.display="none";
             }
              fb_instance_reactions.remove();
+        }
+        if(YT.PlayerState.PAUSED &&cameraOn){
+          if(current_user_is_owner){
+            ga("send", "event", "owner", "paused");
+          }else{
+            ga("send", "event", "non-owner", "paused");
+          }
         }
       }
 
