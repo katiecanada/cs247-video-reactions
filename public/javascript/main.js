@@ -36,9 +36,9 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     if (navigator.userAgent.indexOf("Linux") > -1) {
       document.getElementById("arrow").src="images/arrow-mirror.png";
       document.getElementById("arrow").style.right="";
-      document.getElementById("arrow").style.left="395px";
+      document.getElementById("arrow").style.left="487px";
       document.getElementById("message").style.right="";
-      document.getElementById("message").style.left="560px";
+      document.getElementById("message").style.left="652px";
     } else if (navigator.userAgent.indexOf("Windows") > -1) {
       document.getElementById("arrow").src="images/arrow-mirror.png";
       document.getElementById("arrow").style.right="";
