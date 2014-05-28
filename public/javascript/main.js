@@ -411,7 +411,7 @@ function closeShare(){
           }
         }
         //if video finishes playing
-        if(event.data==0){
+        else if(event.data==0){
           if(current_user_is_owner) ga("send", "event", "owner", "finish");
           else ga("send", "event", "non-owner", "finish");
         }
@@ -423,7 +423,7 @@ function closeShare(){
             }
              fb_instance_reactions.remove();
         }
-        if(YT.PlayerState.PAUSED &&cameraOn){
+        else if(YT.PlayerState.PAUSED &&cameraOn){
           if(current_user_is_owner){
             ga("send", "event", "owner", "paused");
           }else{
