@@ -70,6 +70,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
     // generate new chatroom id or use existing id
     var url_segments = document.location.href.split("/#");
+    console.log(url_segments);
     if(url_segments[1]){
       fb_chat_room_id = url_segments[1];
     }else{
