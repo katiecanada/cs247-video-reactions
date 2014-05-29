@@ -577,3 +577,12 @@ function closeShare(){
     document.getElementById("sendInvites").style.display="none";
     document.getElementById("sendMore").style.display="block";
   }*/
+
+  function sendFB(){
+    console.log("sending with facebook");
+    var location = document.location.origin;
+     FB.ui({
+      method: 'send',
+      link: location+"/#"+fb_chat_room_id,
+    });
+  }

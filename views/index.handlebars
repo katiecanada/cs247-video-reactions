@@ -4,22 +4,7 @@
           appId      : '460288054074567',
           xfbml      : true,
           version    : 'v2.0'
-        });
-
-         FB.ui(
-  {
-    method: 'share',
-    href: 'https://developers.facebook.com/docs/',
-  },
-  function(response) {
-    if (response && !response.error_code) {
-      alert('Posting completed.');
-    } else {
-      alert('Error while posting.');
-    }
-  }
-);
-        
+        });  
       };
 
       (function(d, s, id){
@@ -60,6 +45,7 @@
 <h2> Share with your friends!</h2>
 Simply send this URL: <input id="shareLink" onclick="this.select()">
 <button id="copy-button" data-clipboard-target="shareLink" data-clipboard-text="Copy Me!" title="Click to copy me.">Copy to Clipboard</button> <br>
+<button id="send-fb" onclick="sendFB()">Send with Facebook </button>
 Return to this link to watch your friends' reactions.
 <button id="x" type="button" onclick="closeShare()">x </button>
 </div>
