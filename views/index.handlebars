@@ -42,10 +42,13 @@
   </div>
 
 <div id="sendInvites">
-<h2> Share with your friends!</h2>
-Simply send this URL: <input id="shareLink" onclick="this.select()">
-<button id="copy-button" data-clipboard-target="shareLink" data-clipboard-text="Copy Me!" title="Click to copy me.">Copy to Clipboard</button> <br>
-<button id="send-fb" onclick="sendFB()">Send with Facebook </button>
+<h2> Share with your friends!</h2> 
+Send directly:
+<button id="send-fb" onclick="sendFB()"><img src="http://www.blackthumbstudio.com/assets/img/facebook-icon.png"></img> </button>
+<button id="send-email" onclick="sendEmail()"><img src="http://nola.gov/app_themes/nola/images/email-icon.gif"></img> </button><br>
+Or simply send this URL: <input id="shareLink" onclick="this.select()">
+<button id="copy-button" data-clipboard-target="shareLink" data-clipboard-text="Copy Me!" title="Click to copy me.">Copy to Clipboard</button>
+<br>
 Return to this link to watch your friends' reactions.
 <button id="x" type="button" onclick="closeShare()">x </button>
 </div>

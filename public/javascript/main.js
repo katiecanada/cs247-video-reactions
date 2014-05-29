@@ -559,24 +559,15 @@ function closeShare(){
     }
     window.location.href=location+"/#"+fb_chat_room_id;
   }
-/*
+
 //This is the email feature from the previous version
-  function sendInvites(){
-    var contacts = document.getElementById("invites").value;
-    contacts=contacts.replace(";",",");
-    contacts=contacts.replace(", ",",");
-    contacts=contacts.replace(" ",",");
-    sentTo.push(contacts.split(","));
-    //contacts=contacts.split(",");
-    console.log(contacts);
-    //for(var i=0; i<contacts.length; i++){
-     // var email = contacts[i];
+  function sendEmail(){
      var link=document.location.origin+"/#"+fb_chat_room_id;
-     document.location.href="mailto:"+contacts+"?subject=Youtube Vid&body=I want to share a video with you. Check it out at this link: "+link;
+     document.location.href="mailto:?subject=&body=I want to share a video with you. Check it out at this link: "+link;
     //}
     document.getElementById("sendInvites").style.display="none";
     document.getElementById("sendMore").style.display="block";
-  }*/
+  }
 
   function sendFB(){
     console.log("sending with facebook");
@@ -585,4 +576,6 @@ function closeShare(){
       method: 'send',
       link: location+"/#"+fb_chat_room_id,
     });
+     document.getElementById("sendInvites").style.display="none";
+    document.getElementById("sendMore").style.display="block";
   }
