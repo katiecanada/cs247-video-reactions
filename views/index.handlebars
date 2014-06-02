@@ -17,20 +17,27 @@
     
 
     </script>
-
-  <div id="header"> 
-  	<h1 id="title"><a href="/"> <img id="logo" src="images/logo.png"></img></a></h1>
-  	<p id="owner_guide"> Watch your friends' ephemeral reactions to a video! The reactions will disappear after you view them </p>
-  	<p id="friend_guide"> Your friend wants to see your reaction to this video. Press play to watch it and show them what you think! </p>
-  </div>
   
   <div id="waiting">Connecting to chat server...</div>
   
   <div id="second_counter"></div>
-  <button type=button id="sendMore" onclick="displayShareDiv()" > Send to more friends!</button>
   
-  <div id="welcome"></div>
-  <div id="change_name" onclick="changeName()">Not you? Change username</div>
+  
+  <div id=topBar>
+    <div id="welcome"></div>
+    <div id="change_name" onclick="changeName()">Change username</div>
+    <div id="newVideo">
+      <a href="/" title="Share a new video">+</a>
+    </div>
+    <button type=button id="sendMore" onclick="displayShareDiv()" > Send to more friends!</button>
+  </div>
+
+
+  <div id="header"> 
+    <h1 id="title"><a href="/"> <img id="logo" src="images/logo.png"></img></a></h1>
+    <p id="owner_guide"> Watch your friends' ephemeral reactions to a video! The reactions will disappear after you view them </p>
+    <p id="friend_guide"> Your friend wants to see your reaction to this video. Press play to watch it and show them what you think! </p>
+  </div>
 
   <div id="webcam_stream"></div>
   
@@ -63,10 +70,11 @@ Return to this link to watch your friends' reactions.
 <div id="reactions"></div>
 <div id="playVideo"></div>
 
-<div id="footer">
-	<a href="/"> Share a new youtube video </a>
-</div>
 
+
+<br>
+<div id="bottomBar">
+<p id="info">This website is a <a href="http://salty-island-1561.herokuapp.com">project for cs247 at Stanford University.</a> It is not affiliated with YouTube in any way</p></div>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
