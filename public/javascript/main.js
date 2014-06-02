@@ -124,7 +124,6 @@ var current_user_is_owner = false; //flag that says whether the current user is 
        // alert('User is the owner.');
        document.getElementById("reactions").style.display="block";
        document.getElementById("friend_guide").style.display="none";
-       document.getElementById("footer").style.display="none";
        createCopyButton();
        ga("send", "event", "owner", "visit");
       } else {
