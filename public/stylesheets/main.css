@@ -26,10 +26,6 @@ a {
 #shareDiv {
   text-align: center;
 }
-#shareLink {
-  padding: 4px;
-  width: 200px;
-}
 #url {
   height: 30px;
   width: 306px;
@@ -93,6 +89,8 @@ button {
 #sendInvites {
   display: none;
   position: relative;
+  font-size: 10px;
+  height: 70px;
 }
 #webcam_stream {
   display: none;
@@ -181,10 +179,15 @@ h2 {
   margin-top: 3px;
   margin-botton: 3px;
 }
+h3 {
+  margin: 3px;
+  color: #cd201f;
+  font-size: 15pt;
+}
 #x {
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 0px;
+  top: 0px;
   padding: 2px 10px;
   font-weight: bold;
 }
@@ -228,4 +231,33 @@ h2 {
   left: 0px;
   color: white;
   font-size: 5px;
+}
+#send-fb,
+#send-email {
+  background-color: white;
+  color: #3B5998 ;
+  cursor: pointer;
+}
+#send-fb {
+  position: absolute;
+  bottom: 19px;
+  left: 35px;
+}
+#shareLink {
+  padding: 4px;
+  width: 195px;
+  position: absolute;
+  bottom: 15px;
+  left: 385px;
+}
+#send-email {
+  position: absolute;
+  bottom: 15px;
+  left: 235px;
+}
+#owner_guide {
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  display: in-line block;
 }

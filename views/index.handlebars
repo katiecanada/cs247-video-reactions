@@ -35,7 +35,7 @@
 
   <div id="header"> 
     <h1 id="title"><a href="/"> <img id="logo" src="images/logo.png"></img></a></h1>
-    <p id="owner_guide"> Watch your friends' ephemeral reactions to a video! The reactions will disappear after you view them </p>
+    <p id="owner_guide"> Watch your friends' ephemeral reactions to a video! The reactions will disappear after you view them. Return to this link to watch your friends' reactions. </p>
     <p id="friend_guide"> Your friend wants to see your reaction to this video. Press play to watch it and show them what you think! </p>
   </div>
 
@@ -49,14 +49,11 @@
   </div>
 
 <div id="sendInvites">
-<h2> Share with your friends!</h2> 
-Send directly:
-<button id="send-fb" onclick="sendFB()"><img src="http://www.blackthumbstudio.com/assets/img/facebook-icon.png"></img> </button>
-<button id="send-email" onclick="sendEmail()"><img src="http://nola.gov/app_themes/nola/images/email-icon.gif"></img> </button><br>
-Or simply send this URL: <input id="shareLink" onclick="this.select()">
-<button id="copy-button" data-clipboard-target="shareLink" data-clipboard-text="Copy Me!" title="Click to copy me.">Copy to Clipboard</button>
+<h3> Share with your friends!</h3> 
+<button id="send-fb" onclick="sendFB()"><img src="images/facebook.png"></img> </button>
+<button id="send-email" onclick="sendEmail()"><img src="images/email.png"></img> </button><input id="shareLink" onclick="this.select()">
+
 <br>
-Return to this link to watch your friends' reactions.
 <button id="x" type="button" onclick="closeShare()">x </button>
 </div>
 
