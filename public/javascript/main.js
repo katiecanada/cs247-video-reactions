@@ -2,7 +2,7 @@
 // For CS247, Spring 2014
 
 var https=false;
-var ephemeral=true; //flag to turn ephemerality on and off for testing purposes
+var ephemeral=false; //flag to turn ephemerality on and off for testing purposes
 var player; //youtube player object 
 var videoID; //youtube id for the youtube video
 var mediaRecorder; //object that handles video recording
@@ -20,7 +20,6 @@ var fb_instance_reactions; //firebase instance for the reaction videos
 var cameraOn = false; //keeps track of whether the user has enabled the webcam
 var ownerName;
 var reactionsCount = 0; //number of reaction videos displayed
-var reactionLimit = 6; //maximum number of reaction videos displayed
 
 var current_user_is_owner = false; //flag that says whether the current user is the owner
 var player_state="new";
@@ -411,7 +410,7 @@ function closeShare(){
         else if(event.data==0){
           player_state="ended";
           if(!current_user_is_owner){
-            media_stream.stop();
+            media_stream.stop(); //turns off camera
           }
         }
         if (event.data === 0 && ephemeral && current_user_is_owner) {
@@ -424,6 +423,10 @@ function closeShare(){
         }
         else if(event.data==YT.PlayerState.PAUSED){
           player_state="paused";
+           var vids= document.getElementsByClassName("reactionVid");
+            for(var i=0; i<vids.length; i++){
+               vids[i].pause();
+            }
         }
         console.log(player_state);
       }
@@ -462,9 +465,7 @@ function closeShare(){
 * It takes a url to a video and a username to display beneath the video
 */
     function appendVideo(name, url){
-      if (reactionsCount >= reactionLimit) {
-        return;
-      }
+
       var url = URL.createObjectURL(base64_to_blob(url));
       var video = document.createElement("video");
       video.className="reactionVid";
@@ -484,7 +485,14 @@ function closeShare(){
       container.appendChild(title);
 
       //make clicking reaction video start youtube video
-      video.onclick = playVideo;
+      video.onclick = function(){
+        if(player_state=="paused"||player_state=="new"){
+          console.log("clicked video");
+          playVideo();
+        }else if(player_state=="playing"){
+          player.pauseVideo();
+        }
+      };
       container.appendChild(video);
 
       document.getElementById("reactions").appendChild(container);
@@ -545,6 +553,7 @@ function closeShare(){
     document.getElementById("sendMore").style.display="block";
   }
 
+//links with facebook to send through message
   function sendFB(){
     var location = document.location.origin;
      FB.ui({
