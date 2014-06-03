@@ -179,6 +179,7 @@ var player_state="new";
       media_stream = stream;
       player.playVideo();
       document.getElementById("camera_message").style.display="none";
+      $("#blur").toggleClass("blurOn");
       cameraOn=true;
 
       // create video element, attach webcam stream to video element
@@ -350,6 +351,7 @@ function closeShare(){
             player.seekTo(0, false);
             connect_webcam();
             document.getElementById("camera_message").style.display="block";
+             $("#blur").toggleClass("blurOn");
             return;
           }
           video_length=player.getDuration()*1000;

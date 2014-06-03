@@ -151,6 +151,8 @@ button {
 #record_message {
   font-weight: bold;
   color: red;
+  position: absolute;
+  bottom: -11px;
 }
 #arrow {
   width: 200px;
@@ -281,4 +283,12 @@ h3 {
   margin-left: auto;
   margin-right: auto;
   display: in-line block;
+}
+.blurOn {
+  z-index: 500;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
 }
