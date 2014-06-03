@@ -123,6 +123,9 @@ button {
   color: #cd201f;
   cursor: pointer;
 }
+.reactionDiv {
+  display: inline-block;
+}
 .reactionVid {
   border-radius: 5%;
 }
@@ -130,7 +133,7 @@ button {
   width: 100%;
   text-align: center;
   position: relative;
-  height: 350px;
+  max-height: 350px;
 }
 #title {
   margin-bottom: 2px;
@@ -260,8 +263,4 @@ h3 {
   margin-left: auto;
   margin-right: auto;
   display: in-line block;
-}
-.slick-prev,
-.slick-next {
-  font-size: 100pt;
 }

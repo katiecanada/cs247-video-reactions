@@ -514,6 +514,9 @@ function closeShare(){
       document.getElementById("reactions").appendChild(container);
       $('#reactions').slickAdd(container);
       reactionsCount += 1;
+      if(reactionsCount<=3){
+        $('#reactions').slickSetOption("slidesToShow",reactionsCount,true)
+      }
       document.getElementById("playVideo").style.height=50;
     }
 
