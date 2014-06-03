@@ -47,6 +47,7 @@ button{
 }
 
 #webcam_stream{
+  z-index:998;
   position: absolute;
   top: 10px;
   right: 10px;
@@ -127,6 +128,7 @@ button{
 #playVideo{
   display:block;
   margin: 0 auto;
+  height:340px;
 }
 
 #h1{
@@ -161,7 +163,7 @@ button{
   width: 100%;
   text-align: center;
   position:relative;
-  max-height:350px;
+  max-height:285px;
 }
 
 #title {
@@ -189,9 +191,11 @@ button{
   position: absolute;
   right: 5px;
   top:5px;
+  z-index:998;
 }
 
 #message{
+  z-index:999;
   background: white;
   position: absolute;
   right:175px;
@@ -256,9 +260,10 @@ h3{
   background-color: #cd201f;
   width:100%;
   height:40px;
-   top:0;
-   left:0;
- position:fixed;
+  top:0;
+  left:0;
+  position:fixed;
+   z-index: 900;
 }
 
 #newVideo a{
@@ -277,7 +282,8 @@ h3{
   bottom:0px;
   left:0px;
   color:white;
-  font-size:5px;
+  font-size:8px;
+  display:none;
 }
 
 #send-fb, #send-email{
@@ -288,22 +294,36 @@ h3{
 
 #send-fb{
   position:absolute;
-  bottom:19px;
+  bottom:15px;
   left:35px;
 }
 
 #shareLink {
   padding: 4px;
-  width:195px;
+  width:200px;
   position:absolute;
   bottom:15px;
-  left: 385px;
+  left: 375px;
 }
 
 #send-email{
   position:absolute;
   bottom:15px;
-  left:235px;
+  left:205px;
+}
+
+#line1{
+  position:absolute;
+  bottom:12px;
+  left:160px;
+  height:40px;
+}
+
+#line2{
+  position:absolute;
+  bottom:12px;
+  left:324px;
+  height:40px;
 }
 
 #owner_guide{

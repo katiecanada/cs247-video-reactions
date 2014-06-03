@@ -2,7 +2,7 @@
 // For CS247, Spring 2014
 
 var https=false;
-var ephemeral=false; //flag to turn ephemerality on and off for testing purposes
+var ephemeral=true; //flag to turn ephemerality on and off for testing purposes
 var player; //youtube player object 
 var videoID; //youtube id for the youtube video
 var mediaRecorder; //object that handles video recording
@@ -370,9 +370,12 @@ function closeShare(){
           //height: '390',
           //width: '640',
           videoId: videoID,
+           playerVars: { 
+              'rel': 0, 
+          }, 
           events: {
             'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onStateChange': onPlayerStateChange,
           }
         });
       }
@@ -397,14 +400,10 @@ function closeShare(){
             player.stopVideo();
             player.seekTo(0, false);
             connect_webcam();
-            //window.prompt("Please turn the camera on at the top of the screen before you can watch the video. "+ownerName+" wants to see your reaction!");
-            //player.playVideo();
             document.getElementById("camera_message").style.display="block";
             return;
           }
-          console.log("am i getting here?");
           video_length=player.getDuration()*1000;
-          ga("send", "event", "video", "length", video_length);
           pause = video_length+1000;
           console.log("started playing video");
           if(!current_user_is_owner){
@@ -412,7 +411,6 @@ function closeShare(){
             recordWatcher();
           }
           if(current_user_is_owner){
-            ga("send", "event", "owner", "play");
             var vids= document.getElementsByClassName("reactionVid");
             var currentTime = player.getCurrentTime();
             for(var i=0; i<vids.length; i++){
@@ -431,9 +429,9 @@ function closeShare(){
         if (event.data === 0 && ephemeral && current_user_is_owner) {
           console.log("end");
           var vidsViewed= document.getElementsByClassName("viewed");
-           for(var i=0; i<vidsViewed.length; i++){
-               vidsViewed[i].style.display="none";
-            }
+           //for(var i=0; i<vidsViewed.length; i++){
+              // vidsViewed[i].style.display="none";
+            //}
              fb_instance_reactions.remove();
         }
         else if(YT.PlayerState.PAUSED &&cameraOn){
