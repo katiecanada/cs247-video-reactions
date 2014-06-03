@@ -20,7 +20,7 @@ var fb_instance_reactions; //firebase instance for the reaction videos
 var cameraOn = false; //keeps track of whether the user has enabled the webcam
 var ownerName;
 var reactionsCount = 0; //number of reaction videos displayed
-
+var videoLengthLimit = 180; //in seconds
 var current_user_is_owner = false; //flag that says whether the current user is the owner
 var player_state="new";
 var xmlhttp = new XMLHttpRequest();
@@ -285,7 +285,7 @@ function urlAdded(){
           // alert(xhr.status); 
           document.getElementById("error").style.display="block";},
         200:function(data){
-          if(($(data).find('duration').attr('seconds'))<=180){
+          if(($(data).find('duration').attr('seconds'))<=videoLengthLimit){
             addValidVideo();
           }else{
             document.getElementById("error").innerHTML="<img src='images/alert.png'> Video too long. Please upload a video shorter than 3 minutes";
