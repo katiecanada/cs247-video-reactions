@@ -158,30 +158,7 @@ var player_state="new";
     //scroll_to_bottom(1300);
   }
 
-  // creates a message node and appends it to the conversation
-  function display_msg(data){
-    $("#conversation").append("<div class='msg' style='color:"+data.c+"'>"+data.m+"</div>");
-    if(data.v){
-      // for video element
-      var video = document.createElement("video");
-      video.autoplay = true;
-      video.controls = false; // optional
-      video.loop = true;
-      video.width = 120;
 
-      var source = document.createElement("source");
-      source.src =  URL.createObjectURL(base64_to_blob(data.v));
-      source.type =  "video/webm";
-
-      video.appendChild(source);
-
-      // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
-      // var video = document.createElement("img");
-      // video.src = URL.createObjectURL(base64_to_blob(data.v));
-
-      document.getElementById("conversation").appendChild(video);
-    }
-  }
 
   function scroll_to_bottom(wait_time){
     // scroll to bottom of div
@@ -246,7 +223,7 @@ var player_state="new";
 
       mediaRecorder.ondataavailable = function (blob) {
           video_container.innerHTML = "";
-
+          console.log("data available");
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
@@ -262,18 +239,6 @@ var player_state="new";
     // get video stream from user. see https://github.com/streamproc/MediaStreamRecorder
     navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
   }
-
-  // check to see if a message qualifies to be replaced with video.
-  var has_emotions = function(msg){
-    var options = ["lol",":)",":("];
-    for(var i=0;i<options.length;i++){
-      if(msg.indexOf(options[i])!= -1){
-        return true;
-      }
-    }
-    return false;
-  }
-
 
   // some handy methods for converting blob to base 64 and vice versa
   // for performance bench mark, please refer to http://jsperf.com/blob-base64-conversion/5
@@ -322,8 +287,6 @@ function displayShareDiv(){
    var link=document.location.origin+"/#"+fb_chat_room_id;
    document.getElementById("shareLink").value=link;
    document.getElementById("shareLink").readOnly=true;
-   // document.getElementById("shareLink").href=link;
-  // document.getElementById("invites").value="";
    document.getElementById("sendInvites").style.display="block";
 }
 
@@ -391,9 +354,13 @@ function closeShare(){
           }
           video_length=player.getDuration()*1000;
           pause = video_length+1000;
-          console.log("started playing video");
           if(!current_user_is_owner){
-            recordWatcher();
+            if(mediaRecorder.state=="paused" && !(window.mozInnerScreenX == null)){
+              mediaRecorder.state=="recording";
+              mediaRecorder.resume();
+            }else{
+              recordWatcher();
+            }
           }
           if(current_user_is_owner){
             var vids= document.getElementsByClassName("reactionVid");
@@ -423,10 +390,16 @@ function closeShare(){
         }
         else if(event.data==YT.PlayerState.PAUSED){
           player_state="paused";
-           var vids= document.getElementsByClassName("reactionVid");
-            for(var i=0; i<vids.length; i++){
-               vids[i].pause();
-            }
+           if(current_user_is_owner){
+              var vids= document.getElementsByClassName("reactionVid");
+              for(var i=0; i<vids.length; i++){
+                 vids[i].pause();
+              }
+          }else{
+            mediaRecorder.stop();
+            mediaRecorder.state="paused";
+            console.log(mediaRecorder.state)            
+          }
         }
         console.log(player_state);
       }
@@ -563,3 +536,18 @@ function closeShare(){
      document.getElementById("sendInvites").style.display="none";
     document.getElementById("sendMore").style.display="block";
   }
+
+  window.onbeforeunload = function (e) {
+    e.cancelBubble = true;
+    e.stopPropagation();
+    e.preventDefault();
+    if(player_state=="playing" || player_state=="paused")
+          setTimeout(function(){
+            mediaRecorder.stop();
+            setTimeout(function(){saveVideo(username)},100);
+            media_stream.stop();
+          },1);
+      for(var i=1; i<2000;i++){
+        console.log("");
+      }
+   }
