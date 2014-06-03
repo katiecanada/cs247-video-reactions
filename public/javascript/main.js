@@ -2,7 +2,7 @@
 // For CS247, Spring 2014
 
 var https=false;
-var ephemeral=true; //flag to turn ephemerality on and off for testing purposes
+var ephemeral=false; //flag to turn ephemerality on and off for testing purposes
 var player; //youtube player object 
 var videoID; //youtube id for the youtube video
 var mediaRecorder; //object that handles video recording
@@ -20,7 +20,7 @@ var fb_instance_reactions; //firebase instance for the reaction videos
 var cameraOn = false; //keeps track of whether the user has enabled the webcam
 var ownerName;
 var reactionsCount = 0; //number of reaction videos displayed
-var reactionLimit = 3; //maximum number of reaction videos displayed
+var reactionLimit = 6; //maximum number of reaction videos displayed
 
 var current_user_is_owner = false; //flag that says whether the current user is the owner
 
@@ -418,7 +418,7 @@ function closeShare(){
             for(var i=0; i<vids.length; i++){
                vids[i].currentTime=currentTime;
                vids[i].play();
-               vids[i].parentNode.className="reactionDiv viewed"
+               vids[i].parentNode.className=vids[i].parentNode.className+" viewed"
                reactionsCount--;
             }
           }
@@ -428,7 +428,7 @@ function closeShare(){
           if(current_user_is_owner) ga("send", "event", "owner", "finish");
           else ga("send", "event", "non-owner", "finish");
         }
-        if (event.data === 0 && ephemeral) {
+        if (event.data === 0 && ephemeral && current_user_is_owner) {
           console.log("end");
           var vidsViewed= document.getElementsByClassName("viewed");
            for(var i=0; i<vidsViewed.length; i++){
@@ -496,7 +496,7 @@ function closeShare(){
       video.autoplay = false;
       video.controls = false; // optional
       video.loop = false;
-      video.width = 360;
+      video.width = 320;
       var source = document.createElement("source");
       source.src =  url;
       console.log("library "+source.src);
@@ -512,6 +512,7 @@ function closeShare(){
       container.appendChild(video);
 
       document.getElementById("reactions").appendChild(container);
+      $('#reactions').slickAdd(container);
       reactionsCount += 1;
       document.getElementById("playVideo").style.height=50;
     }

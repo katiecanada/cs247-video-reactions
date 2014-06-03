@@ -1,7 +1,7 @@
 /* Slider */
 .slick-slider { position: relative; display: block; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -ms-touch-action: none; touch-action: none; -webkit-tap-highlight-color: transparent; }
 
-.slick-list { position: relative; overflow: hidden; display: block; margin: 0; padding: 0; }
+.slick-list { position: relative; overflow: hidden; display: block; margin: 0; padding: 0; margin-left: auto; margin-right: auto;}
 .slick-list:focus { outline: none; }
 .slick-loading .slick-list { background: white url('ajax-loader.gif') center center no-repeat; }
 .slick-list.dragging { cursor: pointer; cursor: hand; }
@@ -25,11 +25,11 @@
 @font-face { font-family: "slick"; src: url('fonts/slick.eot'); src: url('fonts/slick.eot?#iefix') format("embedded-opentype"), url('fonts/slick.woff') format("woff"), url('fonts/slick.ttf') format("truetype"), url('fonts/slick.svg#slick') format("svg"); font-weight: normal; font-style: normal; }
 
 /* Arrows */
-.slick-prev, .slick-next { position: absolute; display: block; height: 20px; width: 20px; line-height: 0; font-size: 0; cursor: pointer; background: transparent; color: transparent; top: 50%; margin-top: -10px; padding: 0; border: none; outline: none; }
+.slick-prev, .slick-next { position: absolute; display: block; height: 100px; width: 100px; line-height: 0; font-size: 0; cursor: pointer; background: transparent; color: transparent; top: 50%; margin-top: -60px; padding: 0; border: none; outline: none; }
 .slick-prev:focus, .slick-next:focus { outline: none; }
 .slick-prev.slick-disabled:before, .slick-next.slick-disabled:before { opacity: 0.25; }
 
-.slick-prev:before, .slick-next:before { font-family: "slick"; font-size: 20px; line-height: 1; color: white; opacity: 0.85; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.slick-prev:before, .slick-next:before { font-family: "slick"; font-size: 60px; line-height: 1; color: #cd201f; opacity: 0.8; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 .slick-prev { left: -25px; }
 .slick-prev:before { content: "\2190"; }
