@@ -284,18 +284,24 @@ function urlAdded(){
         400:function(){     
           // alert(xhr.status); 
           document.getElementById("error").style.display="block";},
-        200:function(){
-          addValidVideo();
-          //alert(xhr.status); 
+        200:function(data){
+          if(($(data).find('duration').attr('seconds'))<=180){
+            addValidVideo();
+          }else{
+            document.getElementById("error").innerHTML="<img src='images/alert.png'> Video too long. Please upload a video shorter than 3 minutes";
+            document.getElementById("error").style.display="block";
+          } 
         }
       },
      });
    }else{
+    document.getElementById("error").innerHTML="<img src='images/alert.png'> Please enter a valid youtube link";
     document.getElementById("error").style.display="block";
    }
 }
 
 function addValidVideo(){
+
     document.getElementById("error").style.display="none";
      addVideo(vidUrl);
      fb_instance_mainVid.push({ url: vidUrl});
