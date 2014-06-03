@@ -23,6 +23,7 @@ var reactionsCount = 0; //number of reaction videos displayed
 
 var current_user_is_owner = false; //flag that says whether the current user is the owner
 var player_state="new";
+var xmlhttp = new XMLHttpRequest();
 
   cur_video_blob = null;
   var fb_instance;
@@ -272,12 +273,33 @@ var player_state="new";
 * Calls the proper functions to display the video and to display the sharing information
 */
 function urlAdded(){
-   var vidUrl=document.getElementById("url").value;
-   vidUrl=vidUrl.match("v=[^&]*");
-   vidUrl=vidUrl[0].replace("v=", "");
-   addVideo(vidUrl);
-   fb_instance_mainVid.push({ url: vidUrl});
-   displayShareDiv();
+  vidUrl=document.getElementById("url").value;
+  if(vidUrl.indexOf("youtube")!=-1 && vidUrl.indexOf("v="!=-1)){
+     vidUrl=vidUrl.match("v=[^&]*");
+     vidUrl=vidUrl[0].replace("v=", "");
+     request=$.ajax({
+      type:"GET",
+      url:"http://gdata.youtube.com/feeds/api/videos/"+vidUrl,
+      statusCode:{
+        400:function(){     
+          // alert(xhr.status); 
+          document.getElementById("error").style.display="block";},
+        200:function(){
+          addValidVideo();
+          //alert(xhr.status); 
+        }
+      },
+     });
+   }else{
+    document.getElementById("error").style.display="block";
+   }
+}
+
+function addValidVideo(){
+    document.getElementById("error").style.display="none";
+     addVideo(vidUrl);
+     fb_instance_mainVid.push({ url: vidUrl});
+     displayShareDiv();
 }
 
 /*
@@ -466,6 +488,9 @@ function closeShare(){
           playVideo();
         }else if(player_state=="playing"){
           player.pauseVideo();
+        }else if(player_state=="ended"){
+           player.seekTo(0, false);
+           playVideo();
         }
       };
       container.appendChild(video);

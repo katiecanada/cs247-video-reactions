@@ -61,6 +61,7 @@
 <button id="x" type="button" onclick="closeShare()">x </button>
 </div>
 
+<div id="error"><img src="images/alert.png">Please enter a valid youtube link</div>
 <div id="shareDiv">
 	<input type="text" name="url" id="url" placeholder="Paste a youtube URL..." onkeydown="if (event.keyCode == 13) urlAdded()" onpaste="setTimeout(urlAdded, 4);">
 	<button id="upload" type="button" onclick="urlAdded()"> Share </button>
