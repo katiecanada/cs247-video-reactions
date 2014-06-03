@@ -1,8 +1,5 @@
-// Initial code by Borui Wang, updated by Graham Roth
-// For CS247, Spring 2014
-
 var https=false;
-var ephemeral=false; //flag to turn ephemerality on and off for testing purposes
+var ephemeral=true; //flag to turn ephemerality on and off for testing purposes
 var player; //youtube player object 
 var videoID; //youtube id for the youtube video
 var mediaRecorder; //object that handles video recording
