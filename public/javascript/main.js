@@ -23,8 +23,7 @@ var reactionsCount = 0; //number of reaction videos displayed
 var reactionLimit = 6; //maximum number of reaction videos displayed
 
 var current_user_is_owner = false; //flag that says whether the current user is the owner
-
-
+var player_state="new";
 
   cur_video_blob = null;
   var fb_instance;
@@ -70,7 +69,6 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
     // generate new chatroom id or use existing id
     var url_segments = document.location.href.split("/#");
-    console.log(url_segments);
     if(url_segments[1]){
       fb_chat_room_id = url_segments[1];
     }else{
@@ -137,9 +135,7 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
         //display reactions that have already been recorded if current user is owner
     fb_instance_reactions.on("child_added", function(snapshot){
-       console.log(current_user_is_owner);
        if(current_user_is_owner){
-        console.log("new reaction");
         document.getElementById("sendInvites").style.display="none";
         document.getElementById("sendMore").style.display="block";
         appendVideo(snapshot.val().name, snapshot.val().v);
@@ -151,7 +147,6 @@ var current_user_is_owner = false; //flag that says whether the current user is 
     fb_instance_mainVid.on("child_added",function(snapshot){
       addVideo(snapshot.val().url);
       if(current_user_is_owner && reactionsCount==0){
-        console.log("should display share div");
         displayShareDiv();
       }
     });
@@ -205,10 +200,11 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 
     // callback for when we get video stream from user.
     var onMediaSuccess = function(stream) {
+      media_stream = stream;
       player.playVideo();
       document.getElementById("camera_message").style.display="none";
       cameraOn=true;
-      ga("send", "event", "non-owner", "camera-on");
+
       // create video element, attach webcam stream to video element
       var video_width= 160;
       var video_height= 120;
@@ -250,7 +246,6 @@ var current_user_is_owner = false; //flag that says whether the current user is 
       mediaRecorder.video_height = video_height/2;
 
       mediaRecorder.ondataavailable = function (blob) {
-          //console.log("new data available!");
           video_container.innerHTML = "";
 
           // convert data into base 64 blocks
@@ -258,11 +253,6 @@ var current_user_is_owner = false; //flag that says whether the current user is 
             cur_video_blob = b64_data;
           });
       };
-      //setInterval( function() {
-        //mediaRecorder.stop();
-        //mediaRecorder.start(3000);
-      //}, 3000 );
-      console.log("connect to media stream!");
     }
 
     // callback if there is an error when we try and get the video stream
@@ -317,7 +307,6 @@ var current_user_is_owner = false; //flag that says whether the current user is 
 * Calls the proper functions to display the video and to display the sharing information
 */
 function urlAdded(){
-   console.log("form submitted");
    var vidUrl=document.getElementById("url").value;
    vidUrl=vidUrl.match("v=[^&]*");
    vidUrl=vidUrl[0].replace("v=", "");
@@ -359,7 +348,6 @@ function closeShare(){
     player;
     videoID=vidUrl;
     done = false;
-    //document.getElementById("playVideo").innerHTML="<iframe title=\"Youtube video player\" src=\""+vidUrl+"\"></iframe>";
   }
 
 /*
@@ -367,8 +355,6 @@ function closeShare(){
 */
    function onYouTubeIframeAPIReady() {
         player = new YT.Player('playVideo', {
-          //height: '390',
-          //width: '640',
           videoId: videoID,
            playerVars: { 
               'rel': 0, 
@@ -396,6 +382,7 @@ function closeShare(){
     //if video starts playing
     console.log("event" + YT.PlayerState );
         if (event.data == YT.PlayerState.PLAYING) {
+          player_state="playing";
           if(!cameraOn && !current_user_is_owner){
             player.stopVideo();
             player.seekTo(0, false);
@@ -407,7 +394,6 @@ function closeShare(){
           pause = video_length+1000;
           console.log("started playing video");
           if(!current_user_is_owner){
-            ga("send", "event", "non-owner", "play");
             recordWatcher();
           }
           if(current_user_is_owner){
@@ -423,8 +409,10 @@ function closeShare(){
         }
         //if video finishes playing
         else if(event.data==0){
-          if(current_user_is_owner) ga("send", "event", "owner", "finish");
-          else ga("send", "event", "non-owner", "finish");
+          player_state="ended";
+          if(!current_user_is_owner){
+            media_stream.stop();
+          }
         }
         if (event.data === 0 && ephemeral && current_user_is_owner) {
           console.log("end");
@@ -434,13 +422,10 @@ function closeShare(){
             //}
              fb_instance_reactions.remove();
         }
-        else if(YT.PlayerState.PAUSED &&cameraOn){
-          if(current_user_is_owner){
-            ga("send", "event", "owner", "paused");
-          }else{
-            ga("send", "event", "non-owner", "paused");
-          }
+        else if(event.data==YT.PlayerState.PAUSED){
+          player_state="paused";
         }
+        console.log(player_state);
       }
 
 
@@ -458,7 +443,6 @@ function closeShare(){
 * length of the video has passed
 */
   function recordWatcher(){
-        console.log("recording watcher");
         record(mediaRecorder);
         setTimeout(function(){saveVideo(username)},pause);
       }
@@ -468,11 +452,8 @@ function closeShare(){
 * It saves the video to firebase
 */
   function saveVideo(string){
-      console.log("saving video");
       library[string]=cur_video_blob;
       var url = URL.createObjectURL(base64_to_blob(library[string]));
-      //appendVideo(username, url);
-      console.log("appending video");
       fb_instance_reactions.push({name: username, v:cur_video_blob})
     }
 
@@ -485,8 +466,6 @@ function closeShare(){
         return;
       }
       var url = URL.createObjectURL(base64_to_blob(url));
-      console.log("url: "+url);
-      console.log("appending video");
       var video = document.createElement("video");
       video.className="reactionVid";
       var container = document.createElement("div");
@@ -497,7 +476,6 @@ function closeShare(){
       video.width = 320;
       var source = document.createElement("source");
       source.src =  url;
-      console.log("library "+source.src);
       source.type =  "video/webm";
       video.title=name;
       video.appendChild(source);
@@ -523,11 +501,9 @@ function closeShare(){
 * It starts a recording of the same length as the video and displays the web cam view
 */
   var record = function(mediaRecorder){
-    console.log("recording");
      time=3;
      document.getElementById("second_counter").style.display="block";
      document.getElementById("webcam_stream").style.display="block";
-    console.log("video_length: "+video_length);
      mediaRecorder.start(video_length);
      setTimeout(function(){document.getElementById("webcam_stream").style.display="none"}, pause);
      setTimeout(function(){document.getElementById("second_counter").style.display="none"}, pause);  
@@ -553,7 +529,6 @@ function closeShare(){
   }
 
   function refreshPage(){
-    console.log("refreshing");
     var location = document.location.origin;
     if(https){
       location = location.slice(0,4)+"s"+location.slice(4); //THIS LINE TURNS ON HTTPS. Doesn't work locally
@@ -571,7 +546,6 @@ function closeShare(){
   }
 
   function sendFB(){
-    console.log("sending with facebook");
     var location = document.location.origin;
      FB.ui({
       method: 'send',
